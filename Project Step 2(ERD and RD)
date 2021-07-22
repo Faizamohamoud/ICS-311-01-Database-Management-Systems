@@ -1,0 +1,41 @@
+In this step of the project you are required to provide the conceptual design for your application database and draw the Entity-Relationship Diagram (ERD). The purpose of the ERD is to record and model the business rules that need to be supported by your application as stated in your project proposal.
+
+Part 1: Entity-Relationship Diagram (ERD):
+
+Draw the Entity-Relationship Diagram (ERD) for your application to show the entities and relationships. Make sure to clearly show the following:
+
+1- All entities (i.e., objects) that are needed to implement your application
+
+2- Each entity must be identified by a primary key and described by a set of attributes.
+
+3- List clearly all relationships between entities (Business Rules). For example, the relationship between Customer and Invoice entities is described as “Each customer can have more than one invoice, however, an invoice can belong to only one customer.
+
+4- Relationship cardinalities for all relationships in your ERD (1-to-1, 1-to-M, or M-to-M).
+
+
+
+
+Part 2: Relational Schema:
+
+Convert the ERD that you designed in Part 1 into the corresponding relational schema. The relational schema should include the following:
+
+Table names
+
+Attribute names and data types
+
+Primary keys
+
+Foreign keys
+
+
+
+ER diagram - business rules
+One user has many logins and login is made by one user
+One user has one role and a role is assigned to many users
+One user has many permissions and a permission is given to many users
+One user manage many payments and a payment is made by many users
+One customer manage many payements and a payment is managed by customer
+One payment has one booking and one booking has one payment
+One customer manage many movies and a movie is managed by many customers
+
+
