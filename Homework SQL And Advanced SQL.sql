@@ -1,3 +1,13 @@
+#In this assignment, you are asked to design #and #create a Weather database that includes weather reports #on wind #and temperature that were collected eight different stations.
+Creating the database #and importing data:
+The data to be loaded #in the database #is provided to you #in three CSV files. You will use the following 3 files, located #in D2L (location.csv,temperature.csv, and wind.csv), for this Assignment. Open each file and familiarize yourself with the data format. The data in these files is interpreted as follows:
+location.csv: station name, latitude, longitude
+wind.csv: station name, year, month, wind speed
+temperature.csv: station name, year, month, temperature
+#Create database tables to hold the data given #in the three files. Make sure to identify primary keys #and foreign keys #as appropriate.
+
+
+
 CREATE DATABASE WEATHER
 
 Create table Location (
