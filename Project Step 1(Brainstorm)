@@ -1,0 +1,44 @@
+Instructions:
+The term project involves designing and implemen4ng a database system for an organiza4on.
+Each student has to work individually in this project. The term project is made up of a series of four deliverables, each building towards the finished product. 
+Please remember that all deliverables must be submiAed by midnight of the class day on the date they are due. 
+Late deliverables will penalize according to the late work policy, unless prior arrangements have been made.
+The project requires building a database applica4on for a real-world scenario of your choosing. Some examples include: books, movies, music, computer games, geographical loca4ons, genomic sequences, white water raHing resources, flights, etc. 
+Note that you cannot choose the University database that is used in the text book nor the Customer-Invoice schema that is used in assignment 3. Try to pick an applica4on that is rela4vely substan4al, but not too big. 
+For example, you might want your design to have in the range of 5 to 8 or so en44es.
+You will design schemas for the database, and you will create an actual database using the MySQL rela4onal Database Management System. 
+You will populate the database with sample data, write interac4ve queries and modifica4ons on the database, and develop user-friendly tools for manipula4ng the database.
+
+
+
+Movie reservation app
+:The application is a Movie booking application, basically made for providing the customers an anytime and anywhere service for booking movie tickets and providing information about the movies and their schedules online. 
+The app provides an another way for the customers to buy movie tickets. 
+This system reduces the workload on customers, as it is an automatic ticket booking system. 
+customers visiting this website gets to know about the latest movie released, their schedules and also buy tickets on any particular dates. It helps building better Customer Relationship.List of tables
+
+
+
+List of tables
+Movies-here we will store all the movies
+Users-the table with the list of users that are subscribed on the application and every user has a startdate which is the registration date ,enddate the date when the subscribtion will finish/has finished and lastActive date which is the last date the user has been active.
+Booking -the table where we will save the reservation made from a user
+Payment-in this table we will save for the users the payment made for any reservation Seats-every user can choose the seat based on the ones that are available
+
+
+
+Attributes for each table :
+1. Movies (movie_id(PK),movie_name,movie_language,movie_type,movie_hour,movie_description) 
+2. Users(user_id(pk),user_name,email,username,password,startDate,endDate,lastActiveDate) 
+3. Booking(id(pk),title,type,ticket,date,description) 
+4. Payment(id(pk),userID(fk),payment_date,payment_amount,description) 
+5. Seats(seat_id(pk),movieID(fk),userId(fk),number,type,description)
+
+
+Scenarios based on this datamodel
+➢ Find the favourite movie for the summer (June,July,August),based on the date each reservation is made we can find the favourite movie during the summer months
+➢ Find the average number of seats reserved everyday,we can calculate in an average value the number of seats reserved everyday
+➢ Calculate the amount spent by each user in the end of a month ,the user will have every month a bill to check the amount he has spent for movies
+➢ View available seats is a query that will let you check the seats not reserved for a movie in a specific time
+➢ Select all users active the last 3 months that will check the activity of each user
+
