@@ -1,0 +1,322 @@
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.*;
+
+class Movie { //create movie object to hold data
+
+    private int movieId;
+    private String title;
+    private String description;
+    private String duration;
+    private String language;
+    private String releaseDate;
+    private String country;
+    private String genre;
+
+    public int getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(int movieId) {
+        this.movieId = movieId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+}
+
+class MovieDB {
+
+    private Connection conn;
+
+    public Connection getConnection() {
+        try {
+            /* Tutor: Change driver value based on the database you are using. 
+                Ex. SQL = "com.microsoft.jdbc.sqlserver.SQLServerDriver";
+                Also, make sure to include the library  of the drivers you are using. */
+            Class.forName("org.apache.derby.jdbc.ClientDriver");
+            conn = DriverManager.getConnection("jdbc:derby://localhost:1527/Faiza;", "Faiza", "Faiza"); //Tutor: change the URL, username, & password; based on your actual DB setup.
+            System.out.println("Connected!");
+        } catch (Exception ex) {
+            System.err.println("DB connection error: " + ex.getMessage());
+        }
+        return conn;
+    }
+
+    public void close() { //close DB connection
+        try {
+            getConnection().close();
+            System.out.println("Close DB!");
+        } catch (Exception ex) {
+            System.err.println("Unable to close connection: " + ex.getMessage());
+        }
+    }
+
+    public ArrayList<Movie> getAllMovies() throws SQLException { //extract all records and store in arraylist.
+        conn = getConnection(); //set DB connection
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM MOVIE"); //extract all values in Movie table
+        ArrayList<Movie> mList = new ArrayList<Movie>();
+        Movie m;
+        while (rs.next()) {
+            m = new Movie(); //store every record/row in object Movie
+            m.setMovieId(rs.getInt(1));
+            m.setTitle(rs.getString(2));
+            m.setDescription(rs.getString(3));
+            m.setDuration(rs.getString(4));
+            m.setLanguage(rs.getString(5));
+            SimpleDateFormat sf = new SimpleDateFormat("YYYY-MM-dd"); //set the format of the date
+            m.setReleaseDate(sf.format(rs.getDate(6))); //extract the date value according to define format
+            m.setCountry(rs.getString(7));
+            m.setGenre(rs.getString(8));
+            mList.add(m); //add every record/row in Arraylist.
+        }
+        rs.close();
+        stmt.close();
+        return mList;
+    }
+}
+
+public class MovieGUI extends JFrame {
+
+    ArrayList<Movie> list = new ArrayList<Movie>();
+    private JTextField taID = new JTextField("Movie ID");
+    private JTextField taTitle = new JTextField("Title");
+    private JTextField taDesc = new JTextField("Description");
+    private JTextField taDur = new JTextField("Duration");
+    private JTextField taLang = new JTextField("Language");
+    private JTextField taRd = new JTextField("Release Date");
+    private JTextField taCountry = new JTextField("Country");
+    private JTextField taGenre = new JTextField("Genre");
+    private int record = 0; //record counter
+
+    public MovieGUI() {
+        MovieDB db = new MovieDB();
+        try {
+            list = db.getAllMovies(); //load all data in the arraylist.
+        } catch (SQLException ex) {
+            System.err.println("Unable to connect to database: " + ex.getMessage());
+        }
+
+        this.setTitle("LIST OF MOVIES");
+        this.setSize(600, 400);
+        JPanel pText = new JPanel();
+        JLabel lbl1 = new JLabel("Movie ID: ");
+        JLabel lbl2 = new JLabel("Title");
+        JLabel lbl3 = new JLabel("Description: ");
+        JLabel lbl4 = new JLabel("Duration: ");
+        JLabel lbl5 = new JLabel("Language: ");
+        JLabel lbl6 = new JLabel("Release Date: ");
+        JLabel lbl7 = new JLabel("Country: ");
+        JLabel lbl8 = new JLabel("Genre: ");
+
+        pText.add(lbl1);
+        pText.add(taID);
+        pText.add(lbl2);
+        pText.add(taTitle);
+        pText.add(lbl3);
+        pText.add(taDesc);
+        pText.add(lbl4);
+        pText.add(taDur);
+        pText.add(lbl5);
+        pText.add(taLang);
+        pText.add(lbl6);
+        pText.add(taRd);
+        pText.add(lbl7);
+        pText.add(taCountry);
+        pText.add(lbl8);
+        pText.add(taGenre);
+        pText.setLayout(new GridLayout(8, 2));
+        this.add(pText, BorderLayout.CENTER);
+
+        JPanel pBtn = new JPanel();
+        pBtn.setLayout(new GridLayout(1, 3));
+        JButton btnFirst = new JButton("First");
+        JButton btnPrevious = new JButton("Previous");
+        JButton btnNext = new JButton("Next");
+        JButton btnLast = new JButton("Last");
+        pBtn.add(btnFirst);
+        btnFirst.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                getFirst();
+                btnNext.setEnabled(true);
+            }
+        });
+        pBtn.add(btnPrevious);
+        btnPrevious.setEnabled(false);
+        btnPrevious.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                getPrevious();
+            }
+        });
+        pBtn.add(btnNext);
+        btnNext.setEnabled(false);
+        btnNext.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                getNext();
+                btnPrevious.setEnabled(true);
+            }
+        });
+        pBtn.add(btnLast);
+        btnLast.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                getLast();
+            }
+        });
+        this.add(pBtn, BorderLayout.PAGE_END);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension frameSize = this.getSize();
+        this.setLocation(((screenSize.width - frameSize.width) / 2),
+                ((screenSize.height - frameSize.height) / 2));
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //this.pack();
+        this.setVisible(true);
+
+    }
+
+    public void getFirst() { //get 1st record
+        Movie m = list.get(0); //populate the textfield with data
+        taID.setText(m.getMovieId() + "");
+        taTitle.setText(m.getTitle());
+        taDesc.setText(m.getDescription());
+        taDur.setText(m.getDuration());
+        taLang.setText(m.getLanguage());
+        taRd.setText(m.getReleaseDate());
+        taCountry.setText(m.getCountry());
+        taGenre.setText(m.getGenre());
+    }
+
+    public void getNext() { //get next record
+        record = record + 1;
+        Movie m = list.get(record); //populate the textfield with data
+        taID.setText(m.getMovieId() + "");
+        taTitle.setText(m.getTitle());
+        taDesc.setText(m.getDescription());
+        taDur.setText(m.getDuration());
+        taLang.setText(m.getLanguage());
+        taRd.setText(m.getReleaseDate());
+        taCountry.setText(m.getCountry());
+        taGenre.setText(m.getGenre());
+    }
+
+    public void getPrevious() { //get previous record
+        record = record - 1;
+        Movie m = list.get(record); //populate the textfield with data
+        taID.setText(m.getMovieId() + "");
+        taTitle.setText(m.getTitle());
+        taDesc.setText(m.getDescription());
+        taDur.setText(m.getDuration());
+        taLang.setText(m.getLanguage());
+        taRd.setText(m.getReleaseDate());
+        taCountry.setText(m.getCountry());
+        taGenre.setText(m.getGenre());
+    }
+
+    public void getLast() { //get last record
+        record = list.size()-1;
+        Movie m = list.get(record); //populate the textfield with data
+        taID.setText(m.getMovieId() + "");
+        taTitle.setText(m.getTitle());
+        taDesc.setText(m.getDescription());
+        taDur.setText(m.getDuration());
+        taLang.setText(m.getLanguage());
+        taRd.setText(m.getReleaseDate());
+        taCountry.setText(m.getCountry());
+        taGenre.setText(m.getGenre());
+    }
+
+    public static void main(String[] args) {
+        MovieGUI mg = new MovieGUI();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
